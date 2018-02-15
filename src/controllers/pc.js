@@ -1,4 +1,5 @@
 import wol from 'wakeonlan';
+import BaseController from '../base.controller';
 
 export default class PCController extends BaseController {
   constructor() {
