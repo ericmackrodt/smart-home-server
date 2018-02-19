@@ -8,7 +8,7 @@ const app = express();
 
 app.get('/health', (req, res) => res.send('I am Alive!'));
 
-app.listen(666, () => console.log('Server running and such.'));
+app.listen(80, () => console.log('Server running and such.'));
 
 const pubnub = new PubNub(config.get('pubnub'));
 
