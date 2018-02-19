@@ -2,13 +2,20 @@ import PubNub from 'pubnub';
 import TuyaController, { tuya } from './controllers/tuya';
 import config from 'config';
 import PCController from './controllers/pc';
+import express from 'express';
 
-var pubnub = new PubNub(config.get('pubnub'));
+const app = express();
+
+app.get('/health', (req, res) => res.send('I am Alive!'));
+
+app.listen(666, () => console.log('Server running and such.'));
+
+const pubnub = new PubNub(config.get('pubnub'));
 
 const controllers = [
     new TuyaController(tuya),
     new PCController()
-]
+];
 
 pubnub.addListener({
     message: (m) => controllers.forEach(o => o.receiveMessage(m)),
