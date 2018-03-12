@@ -3,6 +3,7 @@ import TuyaController, { tuya } from './controllers/tuya';
 import config from 'config';
 import PCController from './controllers/pc';
 import express from 'express';
+import Broadlink from './controllers/broadlink';
 
 const app = express();
 
@@ -14,7 +15,8 @@ const pubnub = new PubNub(config.get('pubnub'));
 
 const controllers = [
     new TuyaController(tuya),
-    new PCController()
+    new PCController(),
+    new Broadlink()
 ];
 
 pubnub.addListener({
