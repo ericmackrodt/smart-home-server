@@ -1,4 +1,4 @@
-module.exports.default = host => {
+module.exports.default = host => new Promise((resolve, reject) => {
   const Broadlink = require("./broadlink");
 
   let device = Broadlink({ host, learnOnly: true });
@@ -8,9 +8,9 @@ module.exports.default = host => {
         error: `Learn Code (IR learning not supported for device at ${host})`
       }));
     if (!device.enterLearning && !device.enterRFSweep)
-      return console.log(JSON.stringify({
+      reject({
         error: `Scan RF (RF learning not supported for device at ${host})`
-      }));
+      });
 
     device.cancelRFSweep && device.cancelRFSweep();
 
@@ -44,7 +44,7 @@ module.exports.default = host => {
     let onRawData = message => {
       cancelLearning();
 
-      return console.log(JSON.stringify({
+      return resolve({
         command: req.params.command,
         secret: Math.random()
           .toString(36)
@@ -52,7 +52,7 @@ module.exports.default = host => {
         mac: macRegExp.test(host) ? host : false,
         ip: macRegExp.test(host) ? false : host,
         data: message.toString("hex")
-      }));
+      });
     };
 
     device.on("rawData", onRawData);
@@ -60,6 +60,6 @@ module.exports.default = host => {
     // Start learning:
     device.enterLearning ? device.enterLearning() : device.enterRFSweep();
   } else {
-    console.log(JSON.stringify({ error: `Device ${host} not found` }));
+    reject({ error: `Device ${host} not found` });
   }
-};
+});

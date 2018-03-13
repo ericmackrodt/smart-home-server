@@ -1,6 +1,7 @@
 // import program from 'commander';
 const program = require('commander');
 const rmLearner = require('./rm.learner').default;
+const prompt = require('prompt');
 
 program
   .command('learn <host>')
@@ -8,7 +9,17 @@ program
   // .option('-r, --recursive', 'Remove recursively')
   .action(function (host, cmd) {
     console.log('Learning commands for: ' + host);
-    rmLearner(host);
+    rmLearner(host)
+      .then((result) => {
+        
+      })
+      .catch((err) => {
+        console.log(err);
+        prompt.start();
+        prompt.get(['commandName'], (err, result) => {
+          console.log('commandName: ', result.commandName);
+        });
+      });
   });
 
 program
@@ -19,5 +30,3 @@ program
   });
  
 program.parse(process.argv);
-
-console.log('ran');
