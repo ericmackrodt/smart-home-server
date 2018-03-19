@@ -3,6 +3,7 @@ import server from './server';
 import program from 'commander';
 import rmLearner from './rm.learner';
 import prompt from 'prompt';
+import * as util from './utils';
 
 program
   .command('learn <host>')
@@ -18,7 +19,7 @@ program
         console.log(err);
         prompt.start();
         prompt.get(['commandName'], (err, result) => {
-          console.log('commandName: ', result.commandName);
+          util.addCommandToJson('rm-commands.json', result);
         });
       });
   });

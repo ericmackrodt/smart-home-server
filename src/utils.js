@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 export function promiseRoute(fn) {
   return (req, res) => {
     const timeout = new Promise((resolve, reject) => {
@@ -15,3 +17,12 @@ export function promiseRoute(fn) {
     .catch((err) => res.status(500).send(err.message));
   };
 };
+
+export const addCommandToJson = (file, command) => new Promise((resolve, reject) => {
+  fs.readFile(file, (err, data) => {
+    if (err) return reject(err);
+    const json = JSON.parse(data);
+    json.push(command);
+    fs.writeFile(file, JSON.stringify(json), (err) => err && reject(err));
+  });
+});
