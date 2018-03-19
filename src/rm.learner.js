@@ -1,4 +1,4 @@
-module.exports.default = host => new Promise((resolve, reject) => {
+export default host => new Promise((resolve, reject) => {
   const Broadlink = require("./broadlink");
 
   let device = Broadlink({ host, learnOnly: true });

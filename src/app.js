@@ -1,7 +1,8 @@
 // import program from 'commander';
-const program = require('commander');
-const rmLearner = require('./rm.learner').default;
-const prompt = require('prompt');
+import server from './server';
+import program from 'commander';
+import rmLearner from './rm.learner';
+import prompt from 'prompt';
 
 program
   .command('learn <host>')
@@ -26,7 +27,7 @@ program
   .command('serve')
   .description('Serves the application.')
   .action(function () {
-    console.log('serves!');
+    server();
   });
  
 program.parse(process.argv);

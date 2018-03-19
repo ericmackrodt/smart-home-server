@@ -4,8 +4,8 @@
   "description": "A node.js service for controlling things around the house.",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/server.js --exec babel-node --presets es2015,stage-2",
-    "start": "node dist/server.js",
+    "dev": "nodemon src/app.js --exec babel-node --presets es2015,stage-2",
+    "start": "node dist/app.js",
     "build": "babel src -d dist --presets es2015,stage-2",
     "serve": "node dist/index.js",
     "test": "mocha --compilers js:babel-register",
