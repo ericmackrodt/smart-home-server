@@ -5,16 +5,21 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch",
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js",
-      "args": [
-        "src/server.js", "--exec babel-node", "--presets es2015,stage-2"
-      ],
+      "program": "${workspaceRoot}/dist/app.js",
+      "stopOnEntry": false,
+      "args": ["learn 192.168.1.4"],
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": "build",
+      "runtimeExecutable": null,
+      "runtimeArgs": [ "--nolazy" ],
+      "env": {
+          "NODE_ENV": "development"
+      },
       "console": "integratedTerminal",
-      "protocol": "inspector",
-      "restart": true
+      "sourceMaps": true,
     },
     {
       "name": "Attach",

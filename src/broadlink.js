@@ -45,8 +45,10 @@ const getDevice = ({ host, log, learnOnly }) => {
   let device;
 
   if (host) {
-    device = discoveredDevices[host];
+    console.log('HAS no HOST')
+    device = discoveredDevices[host.toLowerCase()];
   } else { // use the first one of no host is provided
+    console.log('HAS')
     const hosts = Object.keys(discoveredDevices);
     if (hosts.length === 0) {
       log(`Send data (no devices found)`);

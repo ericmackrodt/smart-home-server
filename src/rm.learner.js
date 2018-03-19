@@ -1,5 +1,8 @@
+const Broadlink = require("./broadlink");
+
+const macRegExp = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+
 export default host => new Promise((resolve, reject) => {
-  const Broadlink = require("./broadlink");
 
   let device = Broadlink({ host, learnOnly: true });
   if (device) {
@@ -45,7 +48,6 @@ export default host => new Promise((resolve, reject) => {
       cancelLearning();
 
       return resolve({
-        command: req.params.command,
         secret: Math.random()
           .toString(36)
           .substring(3),
