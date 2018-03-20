@@ -26,3 +26,10 @@ export const addCommandToJson = (file, command) => new Promise((resolve, reject)
     fs.writeFile(file, JSON.stringify(json), (err) => err && reject(err));
   });
 });
+
+export const loadFile = (file) => new Promise((resolve, reject) => {
+  fs.readFile(file, (err, data) => {
+    if (err) return reject(err);
+    resolve(JSON.parse(data));
+  });
+});
