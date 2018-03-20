@@ -23,7 +23,10 @@ export const addCommandToJson = (file, command) => new Promise((resolve, reject)
     if (err) return reject(err);
     const json = JSON.parse(data);
     json.push(command);
-    fs.writeFile(file, JSON.stringify(json), (err) => err && reject(err));
+    fs.writeFile(file, JSON.stringify(json), (err) => {
+      if (err) return reject(err);
+      resolve(json);
+    });
   });
 });
 
