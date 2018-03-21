@@ -1,6 +1,6 @@
 // import program from 'commander';
 import server from './server';
-import program from 'commander';
+import * as program from 'commander';
 import Broadlink from './broadlink';
 import prompt from 'prompt';
 import * as util from './utils';
@@ -46,8 +46,5 @@ program
   .action(function () {
     server();
   });
- 
-if (process.argv.length === 0) {
-  process.argv.push('learn 192.168.1.4')
-}
+
 program.parse(process.argv);
