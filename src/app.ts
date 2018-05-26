@@ -2,7 +2,7 @@
 import server from './server';
 import * as program from 'commander';
 import Broadlink from './broadlink';
-import prompt from 'prompt';
+import * as prompt from 'prompt';
 import * as util from './utils';
 
 console.log('Ran...');
