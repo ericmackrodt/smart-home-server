@@ -21,7 +21,7 @@ export function promiseRoute(fn) {
 export const addCommandToJson = (file, command) => new Promise((resolve, reject) => {
   fs.readFile(file, (err, data) => {
     if (err) return reject(err);
-    const json = JSON.parse(data);
+    const json = JSON.parse(data.toString('utf8'));
     json.push(command);
     fs.writeFile(file, JSON.stringify(json), (err) => {
       if (err) return reject(err);
@@ -30,9 +30,9 @@ export const addCommandToJson = (file, command) => new Promise((resolve, reject)
   });
 });
 
-export const loadFile = (file) => new Promise((resolve, reject) => {
+export const loadFile = <T>(file) => new Promise<T>((resolve, reject) => {
   fs.readFile(file, (err, data) => {
     if (err) return reject(err);
-    resolve(JSON.parse(data));
+    resolve(JSON.parse(data.toString('utf8')));
   });
 });

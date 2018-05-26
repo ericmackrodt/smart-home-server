@@ -1,8 +1,14 @@
+import { ILearnedCommand } from "./models/broadlink";
+
 // From: https://github.com/jor3l/broadlinkrm-ifttt/blob/master/device.js
 const BroadlinkJS = require('broadlinkjs-rm');
 const macRegExp = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
 
 export default class Broadlink {
+  private _broadlink: any;
+  private _discoveredDevices: any; 
+  private _discovering: boolean;
+
   constructor() {
     this._broadlink = new BroadlinkJS();
     this._discoveredDevices = {};
@@ -47,7 +53,7 @@ export default class Broadlink {
     return this._discoverDevices();
   }
 
-  getDevice({ host, learnOnly }) {
+  getDevice({ host, learnOnly }: { host: string, learnOnly?: boolean }) {
     let device;
 
     if (host) {
@@ -56,7 +62,7 @@ export default class Broadlink {
       const hosts = Object.keys(this._discoveredDevices);
       if (hosts.length === 0) {
         console.log(`Send data (no devices found)`);
-        if (!this._discoveringdiscovering) {
+        if (!this._discovering) {
           console.log(`Attempting to discover RM devices for 5s`);
 
           return this._discoverDevices();
@@ -65,7 +71,8 @@ export default class Broadlink {
 
       // Only return device that can Learn codes
       if (learnOnly) {
-        hosts.every((currentDevice) => {
+        hosts.every((c) => {
+          const currentDevice = this._discoveredDevices[c];
           if (currentDevice.enterLearning) {
             device = currentDevice;
             return false;
@@ -100,7 +107,7 @@ export default class Broadlink {
     return Promise.resolve(device);
   }
 
-  learnCommand(host) {
+  learnCommand(host): Promise<ILearnedCommand> {
     return this.getDevice({ host, learnOnly: true })
       .then((device) => {
         if (!device.enterLearning) {
@@ -110,7 +117,7 @@ export default class Broadlink {
           throw new Error(`Scan RF (RF learning not supported for device at ${host})`);
         }
 
-        return new Promise((resolve, reject) => {
+        return new Promise<ILearnedCommand>((resolve, reject) => {
           device.cancelRFSweep && device.cancelRFSweep();
 
           let cancelLearning = () => {

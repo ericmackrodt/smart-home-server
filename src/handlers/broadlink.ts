@@ -1,5 +1,6 @@
 import * as utils from "../utils"
 import Broadlink from './../broadlink';
+import { ILearnedCommand } from "../models/broadlink";
 
 "use stict";
 const PORT = 1880;
@@ -16,20 +17,20 @@ const PORT = 1880;
 const broadlink = new Broadlink();
 broadlink.discover();
 
-let commands = [];
+let commands: ILearnedCommand[] = [];
 
-utils.loadFile('rm-commands.json').then((result) => {
+utils.loadFile<ILearnedCommand[]>('rm-commands.json').then((result) => {
     commands = result;
     console.log("Loaded commands");
 });
 
-function sendData(device = false, hexData = false) {
+function sendData(device: any | Broadlink = false, hexData: boolean | string = false) {
     if (device === false || hexData === false) {
         console.log('Missing params, sendData failed', typeof device, typeof hexData);
         return;
     }
 
-    const hexDataBuffer = new Buffer(hexData, 'hex');
+    const hexDataBuffer = new Buffer(hexData as string, 'hex');
     device.sendData(hexDataBuffer);
 }
 
@@ -37,7 +38,7 @@ export const activate = (cmd) => {
     const command = commands.find((e) => { return e.command == cmd; });
 
     if (command) {
-        let host = (command.mac || command.ip).toLowerCase();
+        let host = ((command.mac || command.ip) as string).toLowerCase();
         return broadlink.getDevice({ host }).then((device) => {
             if (!device) {
                 console.log(`${cmd} sendData(no device found at ${host})`);
@@ -48,18 +49,17 @@ export const activate = (cmd) => {
             } else {
                 if ('sequence' in command) {
                     console.log('Sending sequence..');
-                    for (var i in command.sequence) {
-                        let find = command.sequence[i];
+                    command.sequence.forEach((find, index) => {
                         let send = commands.find((e) => { return e.command == find; });
                         if (send) {
                             setTimeout(() => {
                                 console.log(`Sending command ${send.command}`)
                                 sendData(device, send.data);
-                            }, 1000 * i);
+                            }, 1000 * index);
                         } else {
                             console.log(`Sequence command ${find} not found`);
                         }
-                    }
+                    });
                 } else {
                     sendData(device, command.data);
                 }
