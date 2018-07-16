@@ -34,7 +34,7 @@ function sendData(device: any | Broadlink = false, hexData: boolean | string = f
     device.sendData(hexDataBuffer);
 }
 
-export const activate = (cmd) => {
+export const activate = (cmd): Promise<boolean> => {
     const command = commands.find((e) => { return e.command == cmd; });
 
     if (command) {
@@ -71,6 +71,6 @@ export const activate = (cmd) => {
         });
     } else {
         console.log(`Command not found: ${cmd}`);
-        return false;
+        return Promise.resolve(false);
     }
 };

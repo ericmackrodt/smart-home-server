@@ -60,5 +60,3 @@ typings/
 config/**
 
 dist/
-
-rm-commands.json

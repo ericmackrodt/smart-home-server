@@ -36,3 +36,5 @@ export const loadFile = <T>(file) => new Promise<T>((resolve, reject) => {
     resolve(JSON.parse(data.toString('utf8')));
   });
 });
+
+export const delay = (seconds: number) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
